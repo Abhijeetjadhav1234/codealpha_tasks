@@ -1,30 +1,35 @@
-const images = [
-  "images/nature1.jpg",
-  "images/animal1.jpg",
-  "images/nature2.jpg",
-  "images/animal2.jpg"
-];
+const display = document.getElementById("display");
 
-let currentIndex = 0;
-
-function openLightbox(index) {
-  currentIndex = index;
-  document.getElementById("lightbox-img").src = images[currentIndex];
-  document.getElementById("lightbox").style.display = "flex";
+function append(value) {
+  display.value += value;
 }
 
-function closeLightbox() {
-  document.getElementById("lightbox").style.display = "none";
+function clearDisplay() {
+  display.value = '';
 }
 
-function changeImage(direction) {
-  currentIndex = (currentIndex + direction + images.length) % images.length;
-  document.getElementById("lightbox-img").src = images[currentIndex];
+function deleteChar() {
+  display.value = display.value.slice(0, -1);
 }
 
-function filterImages(category) {
-  const allImages = document.querySelectorAll('.gallery .image');
-  allImages.forEach(img => {
-    img.style.display = (category === 'all' || img.classList.contains(category)) ? "block" : "none";
-  });
+function calculate() {
+  try {
+    display.value = eval(display.value);
+  } catch {
+    display.value = "Error";
+  }
 }
+
+// Keyboard support
+document.addEventListener("keydown", (e) => {
+  if ((e.key >= '0' && e.key <= '9') || ['+', '-', '*', '/', '.'].includes(e.key)) {
+    append(e.key);
+  } else if (e.key === "Enter") {
+    e.preventDefault();
+    calculate();
+  } else if (e.key === "Backspace") {
+    deleteChar();
+  } else if (e.key === "Escape") {
+    clearDisplay();
+  }
+});
